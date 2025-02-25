@@ -2,7 +2,7 @@ import 'package:piramix/domain/entities/entities_barrel.dart';
 
 import 'package:isar/isar.dart';
 
-part 'user_entity.g.dart';
+part 'user.g.dart';
 
 @collection
 class UserEntity {

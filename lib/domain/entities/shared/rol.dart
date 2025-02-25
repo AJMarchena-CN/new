@@ -1,10 +1,10 @@
 import 'package:isar/isar.dart';
 
-part 'rol_entity.g.dart';
+part 'rol.g.dart';
 
 @collection
 class RolEntity {
-  Id isarId = Isar.autoIncrement; // ID autoincremental para Isar
+  Id? isarId = Isar.autoIncrement; // ID autoincremental para Isar
   late int id;
   late String nombre;
 
