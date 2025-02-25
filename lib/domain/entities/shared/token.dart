@@ -1,7 +1,13 @@
+import 'package:isar/isar.dart';
+
+part 'token_entity.g.dart';
+
+@collection
 class TokenEntity {
-  final String token;
-  final String refreshToken;
-  final DateTime expireAt;
+  Id isarId = Isar.autoIncrement; // ID autoincremental para Isar
+  late String token;
+  late String refreshToken;
+  late DateTime expireAt;
 
   TokenEntity({
     required this.token,

@@ -1,13 +1,15 @@
 import 'package:piramix/domain/entities/entities_barrel.dart';
 
-class MunicipioEntity {
-  final int id;
-  final String nombre;
-  final ProvinciaEntity provincia;
+import 'package:isar/isar.dart';
 
-  MunicipioEntity({
-    required this.id,
-    required this.nombre,
-    required this.provincia,
-  });
+part 'municipio_entity.g.dart';
+
+@collection
+class MunicipioEntity {
+  Id isarId = Isar.autoIncrement; // ID autoincremental para Isar
+  late int id;
+  late String nombre;
+  final IsarLink<ProvinciaEntity> provincia = IsarLink<ProvinciaEntity>();
+
+  MunicipioEntity({required this.id, required this.nombre});
 }

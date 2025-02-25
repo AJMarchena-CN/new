@@ -1,7 +1,13 @@
+import 'package:isar/isar.dart';
+
+part 'provincia_entity.g.dart';
+
+@collection
 class ProvinciaEntity {
-  final int id;
-  final String nombre;
-  final String abreviatura;
+  Id isarId = Isar.autoIncrement; // ID autoincremental para Isar
+  late int id;
+  late String nombre;
+  late String abreviatura;
 
   ProvinciaEntity({
     required this.id,

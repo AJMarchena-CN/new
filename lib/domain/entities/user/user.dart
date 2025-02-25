@@ -1,6 +1,12 @@
 import 'package:piramix/domain/entities/entities_barrel.dart';
 
+import 'package:isar/isar.dart';
+
+part 'user_entity.g.dart';
+
+@collection
 class UserEntity {
+  Id? isarId = Isar.autoIncrement; // ID autoincremental para Isar
   final String id;
   final String userName;
   final String email;
@@ -9,10 +15,10 @@ class UserEntity {
   final String? phoneNumber;
   final DateTime? fechaNacimiento;
   final String? fotoPerfil;
-  final TokenEntity? token;
-  final RolEntity? rol;
-  final ProvinciaEntity? provincia;
-  final MunicipioEntity? municipio;
+  final IsarLink<TokenEntity> token = IsarLink<TokenEntity>();
+  final IsarLink<RolEntity> rol = IsarLink<RolEntity>();
+  final IsarLink<ProvinciaEntity> provincia = IsarLink<ProvinciaEntity>();
+  final IsarLink<MunicipioEntity> municipio = IsarLink<MunicipioEntity>();
   final double? plc;
   final int? vecesBloqueoComunidad;
   final int? numAmigos;
@@ -22,8 +28,9 @@ class UserEntity {
   final int? partidosPerdidos;
   final bool? esAmigo;
   final String? solicitudEstado;
-  final ProvinciaEntity? provinciaTmp;
-  final ClubMasJugadoEntity? clubMasJugado;
+  final IsarLink<ProvinciaEntity> provinciaTmp = IsarLink<ProvinciaEntity>();
+  final IsarLink<ClubMasJugadoEntity> clubMasJugado =
+      IsarLink<ClubMasJugadoEntity>();
 
   UserEntity({
     required this.id,
@@ -34,10 +41,6 @@ class UserEntity {
     this.phoneNumber,
     this.fechaNacimiento,
     this.fotoPerfil,
-    this.token,
-    this.rol,
-    this.provincia,
-    this.municipio,
     this.plc,
     this.vecesBloqueoComunidad,
     this.numAmigos,
@@ -47,7 +50,5 @@ class UserEntity {
     this.partidosPerdidos,
     this.esAmigo,
     this.solicitudEstado,
-    this.provinciaTmp,
-    this.clubMasJugado,
   });
 }
