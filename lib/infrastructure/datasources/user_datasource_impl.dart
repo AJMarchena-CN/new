@@ -28,7 +28,7 @@ class UserDataSourceImpl implements UserDataSource {
   }
 
   @override
-  Future<UserEntity> logIn() {
+  Future<UserEntity> logIn({required String email, required String password}) {
     // TODO: implement logIn
     throw UnimplementedError();
   }
