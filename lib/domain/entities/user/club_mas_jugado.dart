@@ -1,12 +1,12 @@
-import 'package:piramix/domain/entities/entities_barrel.dart';
-
 import 'package:isar/isar.dart';
 
 part 'club_mas_jugado.g.dart';
 
 @collection
-class ClubMasJugadoEntity extends ClubBaseEntity {
+class ClubMasJugadoEntity {
   Id? isarId = Isar.autoIncrement; // ID autoincremental para Isar
+  final int id;
+  final String nombre;
 
-  ClubMasJugadoEntity({required super.id, required super.nombre});
+  ClubMasJugadoEntity({required this.id, required this.nombre});
 }

@@ -1,12 +1,11 @@
 class ClubBaseModel {
-  final int id;
-  final String nombre;
+  final String id;
 
-  ClubBaseModel({required this.id, required this.nombre});
+  ClubBaseModel({required this.id});
 
   factory ClubBaseModel.fromJson(Map<String, dynamic> json) {
-    return ClubBaseModel(id: json['id'], nombre: json['nombre']);
+    return ClubBaseModel(id: json['id']);
   }
 
-  Map<String, dynamic> toJson() => {'id': id, 'nombre': nombre};
+  Map<String, dynamic> toJson() => {'id': id};
 }

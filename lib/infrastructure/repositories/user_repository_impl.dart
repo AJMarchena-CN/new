@@ -8,16 +8,6 @@ class UserRepositoryImpl implements UserRepository {
   UserRepositoryImpl(this.userDataSource);
 
   @override
-  Future<UserEntity> getLoggedUserInfo() {
-    return userDataSource.getLoggedUserInfo();
-  }
-
-  @override
-  Future<UserEntity> logIn({required String email, required String password}) {
-    return userDataSource.logIn(email: email, password: password);
-  }
-
-  @override
   Future<void> resetPassword(String email, String code, String newPassword) {
     return userDataSource.resetPassword(email, code, newPassword);
   }

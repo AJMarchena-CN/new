@@ -4,7 +4,7 @@ import 'package:piramix/infrastructure/models/models_barrel.dart';
 
 class UserMapper {
   /// Convierte un `LoginResponseModel` (modelo de inicio de sesión) en una `UserEntity`
-  static UserEntity fromLoginResponse(LoginResponseModel model) {
+  static UserEntity fromLoginResponse(LoginResponse model) {
     final user = UserEntity(
       id: model.id,
       userName: "",
@@ -71,11 +71,13 @@ class UserMapper {
       numAmigos: model.numAmigos,
     );
 
-    user.clubMasJugado.value =
-        model.clubMasJugado != null
-            ? ClubMapper.fromModel(model.clubMasJugado!)
-            : null;
-
+    if (model.clubMasJugado != null) {
+      final clubMasJugadoEntity = ClubMasJugadoEntity(
+        id: model.clubMasJugado!.id,
+        nombre: model.clubMasJugado!.nombre,
+      );
+      user.clubMasJugado.value = clubMasJugadoEntity;
+    }
     return user;
   }
 

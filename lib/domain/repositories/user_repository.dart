@@ -1,10 +1,4 @@
-import 'package:piramix/domain/entities/entities_barrel.dart';
-
 abstract class UserRepository {
-  Future<UserEntity> logIn({required String email, required String password});
-
-  Future<UserEntity> getLoggedUserInfo();
-
   Future<void> sendRecoveryEmail(String email);
 
   Future<void> verifyRecoveryCode(String email, String code);

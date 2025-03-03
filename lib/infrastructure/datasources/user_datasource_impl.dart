@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:piramix/config/constants/environment.dart';
 import 'package:piramix/domain/datasources/user_datasource.dart';
-import 'package:piramix/domain/entities/entities_barrel.dart';
 
 class UserDataSourceImpl implements UserDataSource {
   final dio = Dio(BaseOptions(baseUrl: Environment.baseUrl));
@@ -25,18 +24,6 @@ class UserDataSourceImpl implements UserDataSource {
         },
       ),
     );
-  }
-
-  @override
-  Future<UserEntity> logIn({required String email, required String password}) {
-    // TODO: implement logIn
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<UserEntity> getLoggedUserInfo() {
-    // TODO: implement getLoggedUserInfo
-    throw UnimplementedError();
   }
 
   @override
