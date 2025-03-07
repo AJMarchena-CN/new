@@ -29,13 +29,13 @@ class SharedDatasourceImpl implements SharedDatasource {
 
   @override
   Future<Map<String, dynamic>> logIn({
-    required String email,
+    required String userName,
     required String password,
   }) async {
     try {
       final response = await dio.post(
         '/User/login',
-        data: {'email': email, 'password': password},
+        data: {'userName': userName, 'password': password},
       );
 
       if (response.statusCode == 200) {
@@ -69,7 +69,7 @@ class SharedDatasourceImpl implements SharedDatasource {
   @override
   Future<Map<String, dynamic>> getLoggedUserInfo() async {
     try {
-      final response = await dio.get('/User/me');
+      final response = await dio.get('/User/GetDatosUsuario');
 
       if (response.statusCode == 200) {
         return response.data;

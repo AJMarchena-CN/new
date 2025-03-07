@@ -26,7 +26,7 @@ class UserMapper {
         model.municipio != null
             ? MunicipioMapper.fromModel(model.municipio)
             : null;
-    user.provinciaTmp.value =
+    user.provinciaTmp?.value =
         model.provinciaTmp != null
             ? ProvinciaMapper.fromModel(model.provinciaTmp!)
             : null;

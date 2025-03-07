@@ -1,6 +1,6 @@
 abstract class SharedDatasource {
   Future<Map<String, dynamic>> logIn({
-    required String email,
+    required String userName,
     required String password,
   });
 

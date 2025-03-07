@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-/// Provider para manejar la autenticación
+import 'package:go_router/go_router.dart';
+import 'package:piramix/presentation/providers/shared/login_provider.dart';
 
 class LoginScreen extends ConsumerWidget {
   static const name = 'login';
@@ -10,55 +10,59 @@ class LoginScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
+    final loginState = ref.watch(loginProvider);
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
     final size = MediaQuery.of(context).size;
     final textScaler = MediaQuery.textScalerOf(context);
-    /* final authService = ref.read(authProvider); */
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Spacer(),
-            Image.asset(
-              'assets/images/shared/sign_logo.png',
-              width: size.width * 0.7,
-            ),
-            Spacer(),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          onPressed:
+              () => context.go('/init'), // ⬅️ Usamos goRouter para navegar
+          icon: Icon(Icons.arrow_back_ios, color: colorScheme.primary),
+        ),
+      ),
+      body: Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Spacer(),
+              Image.asset(
+                'assets/images/shared/sign_logo.png',
+                width: size.width * 0.7,
+              ),
+              Spacer(),
 
-            /// Formulario de usuario y contraseña
-            _LoginForm(),
+              /// Formulario de usuario y contraseña
+              _LoginForm(),
 
-            Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              spacing: 10,
-              children: [
-                Divider(color: Colors.white),
-                Text(
-                  'O',
-                  style: TextStyle(
-                    fontSize: textScaler.scale(42),
-                    fontFamily: 'Roboto',
-                    color: theme.colorScheme.secondary,
-                    decoration: TextDecoration.none,
+              const Spacer(),
+
+              if (loginState is AsyncError)
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Text(
+                    "Error: ${loginState.error}",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: textScaler.scale(16),
+                    ),
                   ),
                 ),
-                Divider(color: Colors.white),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-/// Formulario de usuario y contraseña
+/// 🔹 Formulario de usuario y contraseña
 class _LoginForm extends ConsumerStatefulWidget {
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -69,27 +73,46 @@ class _LoginFormState extends ConsumerState<_LoginForm> {
   final TextEditingController _userController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void _login() {
+  void _login() async {
     if (_formKey.currentState!.validate()) {
-      print(
-        "Usuario: ${_userController.text}, Contraseña: ${_passwordController.text}",
+      final notifier = ref.read(loginProvider.notifier);
+
+      await notifier.logIn(
+        userName: _userController.text,
+        password: _passwordController.text,
       );
-      // Aquí podrías llamar a un provider para manejar el login
+
+      // ⬅️ Redirigir según el tipo de usuario después de iniciar sesión
+      final loggedUser = ref.read(loginProvider).value;
+      if (loggedUser != null) {
+        final isClub = loggedUser.idClub != null;
+        if (context.mounted) {
+          context.go(isClub ? '/club/home/0' : '/user/home/0');
+        }
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final loginState = ref.watch(loginProvider);
+    final theme = Theme.of(context);
+    final size = MediaQuery.of(context).size;
+    final textScaler = MediaQuery.textScalerOf(context);
+
     return Form(
       key: _formKey,
       child: Column(
         children: [
           TextFormField(
             controller: _userController,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: 'Usuario',
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
+            style: TextStyle(fontSize: textScaler.scale(16)),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Ingrese su usuario';
@@ -97,14 +120,17 @@ class _LoginFormState extends ConsumerState<_LoginForm> {
               return null;
             },
           ),
-          const SizedBox(height: 30),
+          SizedBox(height: size.height * 0.02),
           TextFormField(
             controller: _passwordController,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: 'Contraseña',
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
             obscureText: true,
+            style: TextStyle(fontSize: textScaler.scale(16)),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Ingrese su contraseña';
@@ -112,10 +138,30 @@ class _LoginFormState extends ConsumerState<_LoginForm> {
               return null;
             },
           ),
-          const SizedBox(height: 30),
-          ElevatedButton(
-            onPressed: _login,
-            child: const Text('Iniciar sesión'),
+          SizedBox(height: size.height * 0.02),
+          SizedBox(
+            width: size.width * 0.75,
+            child: ElevatedButton(
+              onPressed: loginState is AsyncLoading ? null : _login,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: theme.colorScheme.primary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                padding: EdgeInsets.symmetric(vertical: size.height * 0.015),
+              ),
+              child:
+                  loginState is AsyncLoading
+                      ? CircularProgressIndicator(color: Colors.white)
+                      : Text(
+                        'Iniciar sesión',
+                        style: TextStyle(
+                          fontSize: textScaler.scale(18),
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.onPrimary,
+                        ),
+                      ),
+            ),
           ),
         ],
       ),

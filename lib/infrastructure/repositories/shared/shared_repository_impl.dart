@@ -13,9 +13,9 @@ class SharedRepositoryImpl implements SharedRepository {
 
   @override
   Future<Map<String, dynamic>> logIn({
-    required String email,
+    required String userName,
     required String password,
   }) {
-    return sharedDatasource.logIn(email: email, password: password);
+    return sharedDatasource.logIn(userName: userName, password: password);
   }
 }
