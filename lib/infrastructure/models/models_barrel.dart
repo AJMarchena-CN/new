@@ -7,5 +7,5 @@ export 'shared/municipio.dart';
 export 'shared/token.dart';
 export 'user/club_mas_jugado.dart';
 export 'user/user.dart';
-export 'club/club_base.dart';
+export 'club/club_models.dart';
 export 'shared/login_reponse.dart';

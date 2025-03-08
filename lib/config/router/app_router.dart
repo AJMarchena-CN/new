@@ -12,7 +12,9 @@ Future<String?> _redirectLogic(
   final String? userType = await _storage.read(key: 'user_type');
   final String? token = await _storage.read(key: 'token');
 
-  if (token == null) {
+  if (token == null &&
+      (state.uri.toString().startsWith('/club') ||
+          state.uri.toString().startsWith('/user'))) {
     // Si no hay token, redirigir a /init
     return '/init';
   }

@@ -9,13 +9,13 @@ class UserHomeScreen extends ConsumerStatefulWidget {
   final int pageIndex;
   final viewRoutes = const <Widget>[ExampleView()];
 
-  const UserHomeScreen({Key? key, required this.pageIndex}) : super(key: key);
+  const UserHomeScreen({super.key, required this.pageIndex});
 
   @override
-  _UserHomeScreenState createState() => _UserHomeScreenState();
+  UserHomeScreenState createState() => UserHomeScreenState();
 }
 
-class _UserHomeScreenState extends ConsumerState<UserHomeScreen> {
+class UserHomeScreenState extends ConsumerState<UserHomeScreen> {
   @override
   void initState() {
     super.initState();
