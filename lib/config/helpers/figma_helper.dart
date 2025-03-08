@@ -1,7 +1,4 @@
 class FigmaHelper {
-  static const double baseWidth = 393; // Ancho del diseño en Figma
-  static const double baseHeight = 852; // Alto del diseño en Figma
-
   /// 🔹 **Método para calcular el tamaño proporcional de cualquier elemento de Figma**
   static Map<String, double> calculaTamanio({
     required double figmaDeviceWidth,
@@ -13,11 +10,10 @@ class FigmaHelper {
   }) {
     double scaleWidth = userDeviceWidth / figmaDeviceWidth;
     double scaleHeight = userDeviceHeight / figmaDeviceHeight;
-    double scaleFactor = scaleWidth < scaleHeight ? scaleWidth : scaleHeight;
 
     return {
-      "width": figmaElementWidth * scaleFactor,
-      "height": figmaElementHeight * scaleFactor,
+      "width": figmaElementWidth * scaleWidth,
+      "height": figmaElementHeight * scaleHeight,
     };
   }
 }

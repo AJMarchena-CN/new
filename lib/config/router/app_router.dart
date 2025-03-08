@@ -10,12 +10,12 @@ Future<String?> _redirectLogic(
   GoRouterState state,
 ) async {
   final String? userType = await _storage.read(key: 'user_type');
-  /*   final String? token = await _storage.read(key: 'token'); */
+  final String? token = await _storage.read(key: 'token');
 
-  /*   if (token == null) {
+  if (token == null) {
     // Si no hay token, redirigir a /init
     return '/init';
-  } */
+  }
 
   if (userType == 'user' && state.uri.toString().startsWith('/club')) {
     // Si el usuario no tiene permiso para acceder a rutas de 'club'
@@ -43,7 +43,11 @@ final appRouter = GoRouter(
       name: LoginScreen.name,
       builder: (context, state) => LoginScreen(),
     ),
-
+    GoRoute(
+      path: '/map',
+      name: GoogleMapsScreen.name,
+      builder: (context, state) => GoogleMapsScreen(),
+    ),
     // 🔹 Rutas exclusivas para `user`
     GoRoute(
       path: '/user/home/:page',

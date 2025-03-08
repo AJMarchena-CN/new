@@ -50,14 +50,13 @@ class LoginNotifier extends StateNotifier<AsyncValue<LoginResponse?>> {
         ...userInfoMap,
         ...loginResponseMap,
       };
-      print(combinedResponseMap);
 
       // 4. Convertir el mapa combinado a un objeto LoginResponse.
       final loginData = LoginResponse.fromJson(combinedResponseMap);
-      print(loginData);
 
       // 5. Guardar el token en SecureStorage.
       await _storage.write(key: 'token', value: loginData.token.token);
+      await _storage.write(key: 'user_type', value: loginData.rol.nombre);
 
       // 6. Guardar los datos en Isar (usuarios o clubs).
       await _saveUserOrClub(loginData);
@@ -113,36 +112,69 @@ class LoginNotifier extends StateNotifier<AsyncValue<LoginResponse?>> {
             solicitudEstado: userEntity.solicitudEstado,
           );
 
+          // Asignar el `isarId` del usuario existente
+          updatedUser.isarId = existingUser.isarId;
+
+          // Sobrescribir el usuario conservando su `isarId`
           await isar.userEntitys.put(updatedUser);
 
           // Guardar las relaciones de IsarLink
           if (loginData.token != null) {
-            final tokenEntity = TokenMapper.fromModel(loginData.token);
+            final existingToken =
+                await isar.tokenEntitys
+                    .filter()
+                    .tokenEqualTo(loginData.token.token)
+                    .findFirst();
+
+            final tokenEntity =
+                existingToken ?? TokenMapper.fromModel(loginData.token);
+
             await isar.tokenEntitys.put(tokenEntity);
             updatedUser.token.value = tokenEntity;
             await updatedUser.token.save();
           }
 
           if (loginData.rol != null) {
-            final rolEntity = RolMapper.fromModel(loginData.rol);
+            final existingRol =
+                await isar.rolEntitys
+                    .filter()
+                    .idEqualTo(loginData.rol.id)
+                    .findFirst();
+
+            final rolEntity = existingRol ?? RolMapper.fromModel(loginData.rol);
+
             await isar.rolEntitys.put(rolEntity);
             updatedUser.rol.value = rolEntity;
             await updatedUser.rol.save();
           }
 
           if (loginData.provincia != null) {
-            final provinciaEntity = ProvinciaMapper.fromModel(
-              loginData.provincia,
-            );
+            final existingProvincia =
+                await isar.provinciaEntitys
+                    .filter()
+                    .idEqualTo(loginData.provincia.id)
+                    .findFirst();
+
+            final provinciaEntity =
+                existingProvincia ??
+                ProvinciaMapper.fromModel(loginData.provincia);
+
             await isar.provinciaEntitys.put(provinciaEntity);
             updatedUser.provincia.value = provinciaEntity;
             await updatedUser.provincia.save();
           }
 
           if (loginData.municipio != null) {
-            final municipioEntity = MunicipioMapper.fromModel(
-              loginData.municipio,
-            );
+            final existingMunicipio =
+                await isar.municipioEntitys
+                    .filter()
+                    .idEqualTo(loginData.municipio.id)
+                    .findFirst();
+
+            final municipioEntity =
+                existingMunicipio ??
+                MunicipioMapper.fromModel(loginData.municipio);
+
             await isar.municipioEntitys.put(municipioEntity);
             updatedUser.municipio.value = municipioEntity;
             await updatedUser.municipio.save();
@@ -152,32 +184,61 @@ class LoginNotifier extends StateNotifier<AsyncValue<LoginResponse?>> {
 
           // Guardar relaciones de IsarLink
           if (loginData.token != null) {
-            final tokenEntity = TokenMapper.fromModel(loginData.token);
+            final existingToken =
+                await isar.tokenEntitys
+                    .filter()
+                    .tokenEqualTo(loginData.token.token)
+                    .findFirst();
+
+            final tokenEntity =
+                existingToken ?? TokenMapper.fromModel(loginData.token);
+
             await isar.tokenEntitys.put(tokenEntity);
             userEntity.token.value = tokenEntity;
             await userEntity.token.save();
           }
 
           if (loginData.rol != null) {
-            final rolEntity = RolMapper.fromModel(loginData.rol);
+            final existingRol =
+                await isar.rolEntitys
+                    .filter()
+                    .idEqualTo(loginData.rol.id)
+                    .findFirst();
+
+            final rolEntity = existingRol ?? RolMapper.fromModel(loginData.rol);
+
             await isar.rolEntitys.put(rolEntity);
             userEntity.rol.value = rolEntity;
             await userEntity.rol.save();
           }
 
           if (loginData.provincia != null) {
-            final provinciaEntity = ProvinciaMapper.fromModel(
-              loginData.provincia,
-            );
+            final existingProvincia =
+                await isar.provinciaEntitys
+                    .filter()
+                    .idEqualTo(loginData.provincia.id)
+                    .findFirst();
+
+            final provinciaEntity =
+                existingProvincia ??
+                ProvinciaMapper.fromModel(loginData.provincia);
+
             await isar.provinciaEntitys.put(provinciaEntity);
             userEntity.provincia.value = provinciaEntity;
             await userEntity.provincia.save();
           }
 
           if (loginData.municipio != null) {
-            final municipioEntity = MunicipioMapper.fromModel(
-              loginData.municipio,
-            );
+            final existingMunicipio =
+                await isar.municipioEntitys
+                    .filter()
+                    .idEqualTo(loginData.municipio.id)
+                    .findFirst();
+
+            final municipioEntity =
+                existingMunicipio ??
+                MunicipioMapper.fromModel(loginData.municipio);
+
             await isar.municipioEntitys.put(municipioEntity);
             userEntity.municipio.value = municipioEntity;
             await userEntity.municipio.save();
