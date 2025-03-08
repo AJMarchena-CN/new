@@ -5,6 +5,6 @@ class TokenMapper {
   static TokenEntity fromModel(TokenModel model) => TokenEntity(
     token: model.token,
     refreshToken: model.refreshToken,
-    expireAt: model.expireAt,
+    expireAt: DateTime.parse(model.expiresAt),
   );
 }

@@ -7,11 +7,18 @@ class UserMapper {
   static UserEntity fromLoginResponse(LoginResponse model) {
     final user = UserEntity(
       id: model.id,
-      userName: "",
-      email: "",
-      fotoPerfil: model.fotoPerfil,
-      plc: model.plc,
-      vecesBloqueoComunidad: model.vecesBloqueoComunidad,
+      userName: model.userName ?? "",
+      email: model.email ?? "",
+      fotoPerfil: model.fotoPerfil ?? "",
+      plc: model.plc ?? 0.0,
+      vecesBloqueoComunidad: model.vecesBloqueoComunidad ?? 0,
+      phoneNumber: model.phoneNumber ?? "",
+      apellidos: model.apellidos ?? "",
+      nombre: model.nombre ?? "",
+      fechaNacimiento:
+          model.fechaNacimiento != null
+              ? DateTime.tryParse(model.fechaNacimiento! as String)
+              : DateTime.now(),
     );
     //* Para establecer el valor de un IsarLink, se utiliza isarLink.value = entidad
     user.token.value =
@@ -29,7 +36,7 @@ class UserMapper {
     user.provinciaTmp?.value =
         model.provinciaTmp != null
             ? ProvinciaMapper.fromModel(model.provinciaTmp!)
-            : null;
+            : ProvinciaMapper.fromModel(model.provincia);
 
     return user;
   }

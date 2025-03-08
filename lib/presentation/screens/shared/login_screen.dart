@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:piramix/presentation/providers/shared/login_provider.dart';
+import 'package:piramix/presentation/widgets/shared/shared_widget_barrel.dart';
 
 class LoginScreen extends ConsumerWidget {
   static const name = 'login';
@@ -14,7 +15,6 @@ class LoginScreen extends ConsumerWidget {
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
     final size = MediaQuery.of(context).size;
-    final textScaler = MediaQuery.textScalerOf(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -29,7 +29,7 @@ class LoginScreen extends ConsumerWidget {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.max,
             children: [
               Spacer(),
               Image.asset(
@@ -43,16 +43,69 @@ class LoginScreen extends ConsumerWidget {
 
               const Spacer(),
 
-              if (loginState is AsyncError)
-                Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Text(
-                    "Error: ${loginState.error}",
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontSize: textScaler.scale(16),
+              Row(
+                children: [
+                  Expanded(
+                    child: Divider(
+                      color: theme.colorScheme.primary,
+                      thickness: 2,
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text(
+                      'O',
+                      style: TextStyle(
+                        color: theme.colorScheme.primary,
+                        fontFamily: 'Roboto',
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Divider(
+                      color: theme.colorScheme.primary,
+                      thickness: 2,
+                    ),
+                  ),
+                ],
+              ),
+              Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  MediaSvgButton(
+                    svgUrl: 'assets/icons/shared/google_sign_icon.svg',
+                    semanticsLabel: 'google_icon',
+                    onPressed: () {},
+                    size: size.width * 0.15,
+                  ),
+                  MediaSvgButton(
+                    svgUrl: 'assets/icons/shared/instagram_sign_icon.svg',
+                    semanticsLabel: 'instagram_icon',
+                    onPressed: () {},
+                    size: size.width * 0.15,
+                  ),
+                  MediaSvgButton(
+                    svgUrl: 'assets/icons/shared/facebook_sign_icon.svg',
+                    semanticsLabel: 'facebook_icon',
+                    onPressed: () {},
+                    size: size.width * 0.15,
+                  ),
+                  MediaSvgButton(
+                    svgUrl: 'assets/icons/shared/apple_sign_icon.svg',
+                    semanticsLabel: 'apple_icon',
+                    onPressed: () {},
+                    size: size.width * 0.15,
+                  ),
+                ],
+              ),
+              Spacer(),
+
+              if (loginState is AsyncError)
+                CustomFlushbar(
+                  type: MessageType.error,
+                  title: 'Error de autenticación',
+                  message: loginState.error.toString(),
                 ),
             ],
           ),
@@ -108,11 +161,22 @@ class _LoginFormState extends ConsumerState<_LoginForm> {
             controller: _userController,
             decoration: InputDecoration(
               labelText: 'Usuario',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: BorderSide(
+                  color: theme.colorScheme.primary,
+                  width: 2.0, // Ancho aumentado
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: const BorderSide(
+                  color: Colors.white,
+                  width: 2.0, // Ancho aumentado
+                ),
               ),
             ),
-            style: TextStyle(fontSize: textScaler.scale(16)),
+            style: TextStyle(fontSize: textScaler.scale(20)),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Ingrese su usuario';
@@ -120,17 +184,29 @@ class _LoginFormState extends ConsumerState<_LoginForm> {
               return null;
             },
           ),
+
           SizedBox(height: size.height * 0.02),
           TextFormField(
             controller: _passwordController,
             decoration: InputDecoration(
               labelText: 'Contraseña',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: BorderSide(
+                  color: theme.colorScheme.primary,
+                  width: 2.0, // Ancho aumentado
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: const BorderSide(
+                  color: Colors.white,
+                  width: 2.0, // Ancho aumentado
+                ),
               ),
             ),
             obscureText: true,
-            style: TextStyle(fontSize: textScaler.scale(16)),
+            style: TextStyle(fontSize: textScaler.scale(20)),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Ingrese su contraseña';
@@ -138,6 +214,7 @@ class _LoginFormState extends ConsumerState<_LoginForm> {
               return null;
             },
           ),
+
           SizedBox(height: size.height * 0.02),
           SizedBox(
             width: size.width * 0.75,

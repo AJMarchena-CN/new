@@ -1,5 +1,4 @@
 import 'package:piramix/domain/datasources/user_datasource.dart';
-import 'package:piramix/domain/entities/entities_barrel.dart';
 import 'package:piramix/domain/repositories/user_repository.dart';
 
 class UserRepositoryImpl implements UserRepository {
